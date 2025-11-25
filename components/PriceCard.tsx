@@ -16,8 +16,8 @@ const FuelColorsMap: Record<string, { textStyle: string; bgStyle: string }> = {
 };
 
 const FuelMap: Record<string, string> = {
-  '95': 'Bensiin 95',
-  '98': 'Bensiin 98',
+  '95': 'Bensiin',
+  '98': 'Bensiin',
   D: 'Diisel',
   EL: 'Elekter',
 };
@@ -25,7 +25,7 @@ const FuelMap: Record<string, string> = {
 const PriceCard = ({ fuel }: PriceCardProps) => {
   const [fuelType] = useState(fuel);
   const { data: priceRaw = fuelType === 'EL' ? 80.0 : 1.4 } = useFuelPrice(fuelType);
-  const price = fuelType === 'EL' ? priceRaw / 10 : priceRaw; //Kui on elekter (€/MWh), jagame 10-ga, et saada senti/kWh
+  const price = fuelType === 'EL' ? Number((priceRaw / 10).toFixed(2)) : priceRaw; //Kui on elekter (€/MWh), jagame 10-ga, et saada senti/kWh
 
   const fuelTypeTextStyle = FuelColorsMap[fuelType]?.textStyle || 'text-black';
   const fuelTypeBgStyle = FuelColorsMap[fuelType]?.bgStyle || 'bg-gray-200';
@@ -44,7 +44,7 @@ const PriceCard = ({ fuel }: PriceCardProps) => {
         <Text className="text-xl font-bold">{FuelMap[fuelType]}</Text>
         <View className="my-2 flex-row items-center">
           <Text className="text-4xl font-bold">
-            {Number(price).toFixed(2)} <Text className='text-2xl'>{fuelType === 'EL' ? 's/kWh' : '€/L'}</Text>
+            {price} <Text className="text-2xl">{fuelType === 'EL' ? 's/kWh' : '€/L'}</Text>
           </Text>
         </View>
         <Text className="text-md text-gray-600">Hetkehind</Text>
