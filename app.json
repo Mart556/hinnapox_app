@@ -1,37 +1,44 @@
 {
   "expo": {
-    "name": "hinnapox_app",
+    "name": "Hinnapõx",
     "slug": "hinnapox_app",
     "version": "1.0.0",
     "scheme": "hinnapox",
-
     "web": {
       "favicon": "./assets/icon.png"
     },
-
     "experiments": {
       "tsconfigPaths": true
     },
-
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-
     "userInterfaceStyle": "light",
-
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.hinnapox-app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "package": "com.anonymous.hinnapox_app"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "aace0dca-c152-45d1-9d12-503386eb14f6"
       }
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }

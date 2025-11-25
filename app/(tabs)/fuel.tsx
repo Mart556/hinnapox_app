@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import PriceCard from 'components/PriceCard';
 
 const Fuel = () => {
   return (
-    <View className="flex-1 items-center justify-center bg-black p-4">
-      <Text className="text-2xl text-white">Fuel Page</Text>
-    </View>
+    <>
+      <PriceCard fuel="95" />
+      <PriceCard fuel="98" />
+      <PriceCard fuel="D" />
+      {/* Siia tuleb Chart/Diagram */}
+    </>
   );
 };
 

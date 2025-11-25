@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text } from 'react-native';
+import { useFuelPrice } from 'hooks/useFuelPrice';
 
 export type FuelType = '95' | '98' | 'D' | 'EL';
 
@@ -15,69 +16,42 @@ const FuelColorsMap: Record<string, { textStyle: string; bgStyle: string }> = {
 };
 
 const FuelMap: Record<string, string> = {
-  '95': 'Bensiin 95',
-  '98': 'Bensiin 98',
+  '95': 'Bensiin',
+  '98': 'Bensiin',
   D: 'Diisel',
   EL: 'Elekter',
 };
 
 const PriceCard = ({ fuel }: PriceCardProps) => {
   const [fuelType] = useState(fuel);
-  const [price, setPrice] = useState(19.99);
-
-  useEffect(() => {
-    if (!fuelType) return;
-
-    if (fuelType === 'EL') {
-      fetch('https://www.err.ee/api/electricityMarketData/get')
-        .then((response) => response.json())
-        .then((result) => {
-          const currentData = new Date();
-          const currentTime =
-            currentData.getHours() + ':' + currentData.getMinutes().toString().padStart(2, '0');
-
-          const todayDataIndex = result[0].data.time.findIndex(
-            (timeRange: string, index: number) => {
-              let startTime = timeRange.substring(0, 5);
-              let endTime = timeRange.substring(8, 13);
-              return currentTime >= startTime && currentTime <= endTime;
-            }
-          );
-
-          if (!todayDataIndex && todayDataIndex !== 0) {
-            setPrice(0);
-            return;
-          }
-
-          setPrice(result[0].data.price[todayDataIndex] || 0);
-        })
-        .catch((error) => console.error(error));
-      return;
-    }
-
-    fetch('https://www.err.ee/api/gasPriceData/get')
-      .then((response) => response.json())
-      .then((result) => {
-        setPrice(result.data[fuelType] || 0);
-      })
-      .catch((error) => console.error(error));
-  }, [fuelType]);
+  const { data: priceRaw = fuelType === 'EL' ? 80.0 : 1.4 } = useFuelPrice(fuelType);
+  const price = fuelType === 'EL' ? Number((priceRaw / 10).toFixed(2)) : priceRaw; //Kui on elekter (€/MWh), jagame 10-ga, et saada senti/kWh
 
   const fuelTypeTextStyle = FuelColorsMap[fuelType]?.textStyle || 'text-black';
   const fuelTypeBgStyle = FuelColorsMap[fuelType]?.bgStyle || 'bg-gray-200';
+
+  const lastPriceRef = useRef<number>(price);
+  useEffect(() => {
+    if (lastPriceRef.current !== price) {
+      lastPriceRef.current = price;
+      console.log(`Price for ${fuelType} changed to ${price}`);
+    }
+  }, [price, fuelType]);
 
   return (
     <View className={styles.container}>
       <View className="my-1 flex-col">
         <Text className="text-xl font-bold">{FuelMap[fuelType]}</Text>
-        <Text className="my-2 text-4xl font-bold">
-          {price} {fuelType === 'EL' ? '€/MWh' : '€/L'}
-        </Text>
+        <View className="my-2 flex-row items-center">
+          <Text className="text-4xl font-bold">
+            {price} <Text className="text-2xl">{fuelType === 'EL' ? 's/kWh' : '€/L'}</Text>
+          </Text>
+        </View>
         <Text className="text-md text-gray-600">Hetkehind</Text>
       </View>
       <View
-        className={`flex-col justify-center rounded-lg ${fuelTypeBgStyle} min-w-20 items-center px-4 py-2`}>
-        <Text className={`m-0  text-5xl font-bold ${fuelTypeTextStyle}`}>{fuelType}</Text>
+        className={`flex-col justify-center rounded-lg ${fuelTypeBgStyle} min-w-[5.5rem] items-center px-4 py-2`}>
+        <Text className={`m-0 text-5xl font-bold ${fuelTypeTextStyle}`}>{fuelType}</Text>
       </View>
     </View>
   );

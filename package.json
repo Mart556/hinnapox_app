@@ -2,8 +2,8 @@
   "name": "hinnapox_app",
   "version": "1.0.0",
   "scripts": {
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "start": "expo start",
     "prebuild": "expo prebuild",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
@@ -11,12 +11,14 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "expo": "^54.0.23",
+    "@tanstack/react-query": "^5.90.10",
+    "expo": "^54.0.25",
     "expo-constants": "^18.0.10",
+    "expo-dev-client": "~6.0.18",
     "expo-doctor": "^1.17.11",
-    "expo-linking": "^8.0.8",
-    "expo-router": "^6.0.14",
-    "expo-splash-screen": "^31.0.10",
+    "expo-linking": "^8.0.9",
+    "expo-router": "^6.0.15",
+    "expo-splash-screen": "^31.0.11",
     "expo-status-bar": "~3.0.8",
     "nativewind": "latest",
     "react": "19.1.0",
@@ -43,5 +45,6 @@
     "typescript": "~5.9.3"
   },
   "main": "expo-router/entry",
-  "private": true
+  "private": true,
+  "packageManager": "pnpm@10.23.0+sha512.21c4e5698002ade97e4efe8b8b4a89a8de3c85a37919f957e7a0f30f38fbc5bbdd05980ffe29179b2fb6e6e691242e098d945d1601772cad0fef5fb6411e2a4b"
 }
