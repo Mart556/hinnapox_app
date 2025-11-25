@@ -14,7 +14,7 @@ const Settings = () => {
         <TouchableOpacity
           onPress={() => setLanguage('et')}
           className={`flex-1 items-center rounded-xl py-2.5 ${
-            language === 'et' ? 'bg-[#128AEB]' : 'bg-[#E5E5EA]'
+            language === 'et' ? 'bg-theme-blue' : 'bg-[#E5E5EA]'
           }`}>
           <Text
             className={`text-lg font-medium ${language === 'et' ? 'text-white' : 'text-black'}`}>
@@ -24,7 +24,7 @@ const Settings = () => {
         <TouchableOpacity
           onPress={() => setLanguage('en')}
           className={`flex-1 items-center rounded-xl py-2.5 ${
-            language === 'en' ? 'bg-[#128AEB]' : 'bg-[#E5E5EA]'
+            language === 'en' ? 'bg-theme-blue' : 'bg-[#E5E5EA]'
           }`}>
           <Text
             className={`text-lg font-medium ${language === 'en' ? 'text-white' : 'text-black'}`}>
