@@ -1,8 +1,12 @@
 import React from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
-  return <View className="flex-1 bg-white">{children}</View>;
+  return (
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View className="flex-1 bg-white">{children}</View>
+    </ScrollView>
+  );
 };
 
 export default LayoutWrapper;
