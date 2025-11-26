@@ -2,14 +2,7 @@ import React from 'react';
 import { View, Text, ActivityIndicator, Dimensions } from 'react-native';
 import Svg, { Path, Line as SvgLine } from 'react-native-svg';
 import { useTranslation } from 'react-i18next';
-import { useFuelPricesHistory, useElectricityHistory } from 'hooks/useFuelPrice';
-
-export interface ChartData {
-  fuel: string;
-  prices: number[];
-  label: string;
-  color: string;
-}
+import { useFuelPricesHistory, useElectricityHistory, type ChartData } from 'hooks/useFuelPrice';
 
 interface PriceChartProps {
   fuelTypes?: ('95' | '98' | 'D' | 'EL')[];
@@ -37,13 +30,6 @@ const createMultiLinePath = (
   });
 
   return d;
-};
-
-export const FuelConfig: Record<string, { label: string; color: string; apiKey: string }> = {
-  '95': { label: 'petrol95', color: '#10B981', apiKey: '95' },
-  '98': { label: 'petrol98', color: '#F59E0B', apiKey: '98' },
-  D: { label: 'diesel', color: '#000000', apiKey: 'D' },
-  EL: { label: 'electricity', color: '#3B82F6', apiKey: 'EL' },
 };
 
 export default function PriceChart({ fuelTypes = ['95', 'D'] }: PriceChartProps) {
@@ -144,7 +130,7 @@ export default function PriceChart({ fuelTypes = ['95', 'D'] }: PriceChartProps)
               const price = globalMax - (i / 4) * globalRange;
               return (
                 <Text key={`label-${i}`} className="text-right text-xs text-gray-400">
-                  {price.toFixed(2)} €
+                  {price.toFixed(2)} {chartData[0].fuel === 'EL' ? t('elecUnit') : '€/L'}
                 </Text>
               );
             })}
@@ -209,13 +195,13 @@ export default function PriceChart({ fuelTypes = ['95', 'D'] }: PriceChartProps)
               <Text className="font-semibold text-gray-800">{t(chart.label)}</Text>
               <View className="mt-1 flex-col justify-between text-xs text-gray-800">
                 <Text>
-                  {t('average')}: {avgPrice} €
+                  {t('average')}: {avgPrice} {chart.fuel === 'EL' ? t('elecUnit') : '€/L'}
                 </Text>
                 <Text>
-                  {t('maximum')}: {maxPrice} €
+                  {t('maximum')}: {maxPrice} {chart.fuel === 'EL' ? t('elecUnit') : '€/L'}
                 </Text>
                 <Text>
-                  {t('minimum')}: {minPrice} €
+                  {t('minimum')}: {minPrice} {chart.fuel === 'EL' ? t('elecUnit') : '€/L'}
                 </Text>
               </View>
             </View>

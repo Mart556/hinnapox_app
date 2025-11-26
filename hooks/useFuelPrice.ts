@@ -1,6 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
 import { FuelType } from 'components/PriceCard';
-import { FuelConfig, type ChartData } from 'components/PriceChart';
+
+export interface ChartData {
+  fuel: string;
+  prices: number[];
+  label: string;
+  color: string;
+}
+
+export const FuelConfig: Record<string, { label: string; color: string; apiKey: string }> = {
+  '95': { label: 'petrol95', color: '#10B981', apiKey: '95' },
+  '98': { label: 'petrol98', color: '#F59E0B', apiKey: '98' },
+  D: { label: 'diesel', color: '#000000', apiKey: 'D' },
+  EL: { label: 'electricity', color: '#3B82F6', apiKey: 'EL' },
+};
 
 interface FuelPriceData {
   data: {
@@ -15,8 +28,8 @@ interface ElectricityData {
   };
 }
 
-const STALE_TIME = 60000;
-const CACHE_TIME = 1000 * 60 * 60;
+const STALE_TIME = 15 * 60000;
+const CACHE_TIME = 60000 * 60;
 
 const fetchFuelPrice = async (fuelType: FuelType): Promise<number> => {
   if (fuelType === 'EL') {
@@ -75,8 +88,8 @@ export const useFuelPricesHistory = (fuelTypes: FuelType[] = ['95', '98', 'D']) 
   return useQuery({
     queryKey: ['pricesHistory', fuelTypes],
     queryFn: () => fetchPricesHistory(fuelTypes),
-    staleTime: CACHE_TIME / 2,
-    gcTime: CACHE_TIME,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };
 
@@ -88,7 +101,7 @@ const fetchElectricityHistory = async (): Promise<ChartData[]> => {
   if (!Array.isArray(elec) || elec.length === 0) return [];
 
   const prices = elec
-    .map((item: any) => Number(item.avg_price))
+    .map((item: any) => Number((item.avg_price / 10).toFixed(2)))
     .filter((v: number) => !isNaN(v) && v > 0);
 
   if (prices.length === 0) return [];
@@ -101,7 +114,7 @@ export const useElectricityHistory = () => {
   return useQuery({
     queryKey: ['electricityHistory'],
     queryFn: fetchElectricityHistory,
-    staleTime: CACHE_TIME / 2,
-    gcTime: CACHE_TIME,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };
