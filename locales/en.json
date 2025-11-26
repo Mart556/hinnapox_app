@@ -16,5 +16,12 @@
   "settingsTab": "Settings",
   "petrolTab": "Petrol",
   "electricityTab": "Electricity",
-  "mapTab": "Map"
+  "mapTab": "Map",
+  "priceComparison": "Price Comparison",
+  "last30Days": "Last 30 Days",
+  "average": "Average",
+  "minimum": "Minimum",
+  "maximum": "Maximum",
+  "loading": "Loading prices...",
+  "errorLoadingPrices": "Error loading price data"
 }
