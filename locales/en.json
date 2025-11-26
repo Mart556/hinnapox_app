@@ -16,5 +16,6 @@
   "settingsTab": "Settings",
   "petrolTab": "Petrol",
   "electricityTab": "Electricity",
-  "mapTab": "Map"
+  "mapTab": "Map",
+  "elecUnit": "¢/kWh"
 }

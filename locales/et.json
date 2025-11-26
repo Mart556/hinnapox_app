@@ -16,5 +16,6 @@
   "settingsTab": "Seaded",
   "petrolTab": "Kütus",
   "electricityTab": "Elektri",
-  "mapTab": "Kaart"
+  "mapTab": "Kaart",
+  "elecUnit": "s/kWh"
 }

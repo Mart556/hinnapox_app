@@ -46,7 +46,7 @@ const PriceCard = ({ fuel }: PriceCardProps) => {
         <Text className="text-xl font-bold">{t(FuelMapKeys[fuelType])}</Text>
         <View className="my-2 flex-row items-center">
           <Text className="text-4xl font-bold">
-            {price} <Text className="text-2xl">{fuelType === 'EL' ? 's/kWh' : '€/L'}</Text>
+            {price} <Text className="text-2xl">{fuelType === 'EL' ? t('elecUnit') : '€/L'}</Text>
           </Text>
         </View>
         <Text className="text-md text-gray-600">{t('currentPrice')}</Text>
