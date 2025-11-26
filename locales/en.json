@@ -23,5 +23,6 @@
   "minimum": "Minimum",
   "maximum": "Maximum",
   "loading": "Loading prices...",
-  "errorLoadingPrices": "Error loading price data"
+  "errorLoadingPrices": "Error loading price data",
+   "elecUnit": "¢/kWh"
 }
