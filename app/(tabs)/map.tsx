@@ -4,13 +4,13 @@ import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 
 import stations from '../data/tanklad.json';
+import Filter from '../../components/Filter'; // import filter component
 
 type UserLocation = {
   latitude: number;
   longitude: number;
 } | null;
 
-// Map brand names to colors
 const BRAND_COLORS: Record<string, string> = {
   Alexela: 'blue',
   'Circle K': 'red',
@@ -26,6 +26,16 @@ const BRAND_COLORS: Record<string, string> = {
 
 const Map = () => {
   const [userLocation, setUserLocation] = useState<UserLocation>(null);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(Object.keys(BRAND_COLORS));
+
+  // Filter toggle function
+  const toggleBrand = (brand: string) => {
+    setSelectedBrands((prev) =>
+      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
+    );
+  };
+
+  const allBrands = Array.from(new Set(stations.map((s) => s.brand_name)));
 
   useEffect(() => {
     (async () => {
@@ -51,8 +61,12 @@ const Map = () => {
     );
   }
 
+  // Filter stations by selected brands
+  const filteredStations = stations.filter((station) => selectedBrands.includes(station.brand_name));
+
   return (
     <View style={{ flex: 1 }}>
+      <Filter selectedBrands={selectedBrands} toggleBrand={toggleBrand} allBrands={allBrands} />
       <MapView
         style={{ flex: 1 }}
         showsUserLocation={true}
@@ -63,16 +77,13 @@ const Map = () => {
           longitudeDelta: 0.5,
         }}
       >
-        {stations.map((station) => (
+        {filteredStations.map((station) => (
           <Marker
             key={station.id}
-            coordinate={{
-              latitude: station.lat,
-              longitude: station.lon,
-            }}
+            coordinate={{ latitude: station.lat, longitude: station.lon }}
             title={`${station.brand_name} - ${station.name}`}
             description={`${station.address}, ${station.city}`}
-            pinColor={BRAND_COLORS[station.brand_name] || 'gray'} // default to gray
+            pinColor={BRAND_COLORS[station.brand_name] || 'gray'}
           />
         ))}
       </MapView>
