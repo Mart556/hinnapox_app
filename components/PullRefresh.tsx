@@ -1,13 +1,14 @@
 import React, { useState, useCallback } from 'react';
-import { ScrollView, RefreshControl, StyleSheet, ViewStyle } from 'react-native';
+import { View, ScrollView, RefreshControl, StyleSheet, ViewStyle } from 'react-native';
 import { useColorScheme } from 'nativewind';
 
 interface PullRefreshProps {
   children: React.ReactNode;
   style?: ViewStyle;
+  disabled?: boolean;
 }
 
-const PullRefresh = ({ children, style }: PullRefreshProps) => {
+const PullRefresh = ({ children, style, disabled = false }: PullRefreshProps) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const { colorScheme } = useColorScheme();
@@ -23,6 +24,14 @@ const PullRefresh = ({ children, style }: PullRefreshProps) => {
       setRefreshing(false);
     }, 2000);
   }, []);
+
+  if (disabled) {
+    return (
+      <View style={[styles.scrollView, style]} className="flex-1">
+        {children}
+      </View>
+    );
+  }
 
   return (
     <ScrollView

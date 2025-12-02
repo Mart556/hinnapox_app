@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Slot } from 'expo-router';
+import { Slot, usePathname } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LayoutWrapper from 'components/LayoutWrapper';
 
@@ -11,13 +11,17 @@ import PullRefresh from 'components/PullRefresh';
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
+
+  const pathname = usePathname();
+
+  const isMapScreen = pathname.includes('map');
   
   // View vajab className='dark:bg-theme-dark-primary', et telefoni ise enda theme teha tumedaks
   return (
     <View style={{ flex: 1, paddingTop: insets.top, paddingBottom: insets.bottom }} className='dark:bg-theme-dark-primary'>
       <>
         <Header />
-          <PullRefresh>
+          <PullRefresh disabled={isMapScreen}>
             <LayoutWrapper >
               <Slot />
             </LayoutWrapper>
