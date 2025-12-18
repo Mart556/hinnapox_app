@@ -240,15 +240,23 @@ export default function PriceChart({ fuelTypes = ['95', 'D'] }: PriceChartProps)
               left: 0,
               width: width,
               height: height,
+              //@ts-ignore
             }}
             onPress={(event) => {
-              const touch = event.nativeEvent.locationX;
-              if (chartData[0]?.prices) {
-                const relativeX = touch - horizontalPadding;
-                const index = Math.round(
-                  (relativeX / usableWidth) * (chartData[0].prices.length - 1)
-                );
-                setSelectedDataIndex(Math.max(0, Math.min(index, chartData[0].prices.length - 1)));
+              // 1. Get the X coordinate with a fallback for Web (offsetX)
+              const nativeEvent = event.nativeEvent as any;
+              const touchX = nativeEvent.locationX ?? nativeEvent.offsetX;
+
+              if (touchX !== undefined && chartData[0]?.prices) {
+                const relativeX = touchX - horizontalPadding;
+                
+                // 2. Ensure we don't divide by zero and calculate index
+                const dataCount = chartData[0].prices.length - 1;
+                const index = Math.round((relativeX / usableWidth) * dataCount);
+                
+                // 3. Clamp the index between 0 and the max array length
+                const clampedIndex = Math.max(0, Math.min(index, dataCount));
+                setSelectedDataIndex(clampedIndex);
               }
             }}
             activeOpacity={1}
