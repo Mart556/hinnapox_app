@@ -3,6 +3,7 @@ import { View, ActivityIndicator, TouchableOpacity, Text, StyleSheet } from 'rea
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useColorScheme } from 'nativewind';
+import { useFonts } from 'expo-font';
 
 // Data & Contexts
 import stations from 'app/data/tanklad.json'; 
@@ -53,6 +54,11 @@ const MapScreen = () => {
   const isDark = colorScheme === 'dark';
   const iconColor = isDark ? '#9ca3af' : '#4b5563';
   const bgColor = isDark ? '#1f2937' : '#f3f4f6';
+
+  // Load Ionicons Font
+  const [fontsLoaded] = useFonts({
+    ...Ionicons.font,
+  });
 
   // Derived Data
   const allBrands = Array.from(new Set(stations.map((s) => s.brand_name)));
@@ -115,7 +121,19 @@ const MapScreen = () => {
           elevation: 5,
           cursor: 'pointer'
       }}>
-        <Ionicons name="filter" size={24} color={iconColor} />
+        {fontsLoaded ? (
+          <Ionicons name="filter" size={24} color={iconColor} />
+        ) : (
+          <View 
+            style={{
+              width: 16,         // ~1 rem
+              height: 16,        // ~1 rem
+              borderRadius: 8,   // Half of width for a perfect circle
+              backgroundColor: iconColor,
+            }} 
+          />
+        )
+        }
       </TouchableOpacity>
 
       {/* Filter Menu */}
